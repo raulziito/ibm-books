@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#check-box:checked ~ .check {
+  @apply text-opacity-100;
+  animation: check-anime 0.5s 1;
+}
+
+@keyframes check-anime {
+  0%,
+  50% {
+    @apply transform scale-50;
+  }
+  100% {
+    @apply transform scale-100;
+  }
+  25% {
+    @apply transform scale-150 text-opacity-0;
+  }
+}
