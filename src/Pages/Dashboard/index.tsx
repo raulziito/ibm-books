@@ -7,7 +7,7 @@ import {
     ViewGridIcon,
 } from "@heroicons/react/solid";
 import axios, { AxiosResponse } from "axios";
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { Form, Field } from "react-final-form";
 import {
     AiFillHeart,
@@ -15,9 +15,11 @@ import {
     AiOutlineMenu,
     AiOutlineClose,
 } from "react-icons/ai";
+import { useSelector, useDispatch } from "react-redux";
 
 import Books from "../../Components/Books";
 import { api } from "../../Services/api";
+import { getFav } from "../Redux/store";
 
 const sortOptions = [
     { name: "Mais popular", href: "#", current: true },
@@ -59,6 +61,8 @@ const Dashboard: React.FC = () => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const [books, setBooks] = useState<AxiosResponse | null | void>(null);
     const keyID = "AIzaSyA4yCYQJ6my93smp5OsRivKxv8vArvg2d8";
+    const dispatch = useDispatch();
+    const favoriteState = useSelector((state: any) => state.favorite);
 
     function classNames(...classes: any) {
         return classes.filter(Boolean).join(" ");
@@ -70,6 +74,13 @@ const Dashboard: React.FC = () => {
         );
         setBooks(response);
     }
+    useEffect(() => {
+        dispatch(getFav(10));
+    }, []);
+
+    useEffect(() => {
+        console.log("Ivys Gordo Ignorado pela Milfkkk", favoriteState);
+    }, [favoriteState]);
 
     return (
         <div className="bg-white">
