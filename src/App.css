@@ -7,6 +7,16 @@
   animation: check-anime 0.5s 1;
 }
 
+input[type="radio"]{
+    display: none;
+}
+
+.star{
+    cursor: pointer;
+    transition: color 200ms;
+    display: flex;
+}
+
 @keyframes check-anime {
   0%,
   50% {

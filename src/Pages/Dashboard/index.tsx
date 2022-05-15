@@ -60,6 +60,9 @@ const filters = [
 const Dashboard: React.FC = () => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const [books, setBooks] = useState<AxiosResponse | null | void>(null);
+    const [book, setBook] = useState("ibm");
+    const [totalResults, setTotalResults] =
+        useState<AxiosResponse | null | void>(null);
     const keyID = "AIzaSyA4yCYQJ6my93smp5OsRivKxv8vArvg2d8";
     const dispatch = useDispatch();
     const favoriteState = useSelector((state: any) => state.favorite);
@@ -68,19 +71,38 @@ const Dashboard: React.FC = () => {
         return classes.filter(Boolean).join(" ");
     }
 
-    async function onSubmit(values: any) {
-        const response = await api.get(
-            `https://www.googleapis.com/books/v1/volumes?q='${values}&key=${keyID}`
-        );
-        setBooks(response);
-    }
+    useEffect(() => {
+        api.get(
+            `https://www.googleapis.com/books/v1/volumes?q='${book}&key=${keyID}&maxResults=8`
+        ).then((data) => {
+            setBooks(data.data.items);
+            setTotalResults(data.data.totalItems);
+        });
+    }, []);
+
     useEffect(() => {
         dispatch(getFav(10));
     }, []);
 
     useEffect(() => {
-        console.log("Ivys Gordo Ignorado pela Milfkkk", favoriteState);
+        console.log("I");
     }, [favoriteState]);
+
+    function handleChange(e: any) {
+        const book = e.target.value;
+        setBook(book);
+    }
+
+    function handleFindBook(e: any) {
+        e.preventDefault();
+
+        api.get(
+            `https://www.googleapis.com/books/v1/volumes?q='${book}&key=${keyID}&maxResults=20`
+        ).then((data) => {
+            setBooks(data.data.items);
+            setTotalResults(data.data.totalItems);
+        });
+    }
 
     return (
         <div className="bg-white">
@@ -231,7 +253,7 @@ const Dashboard: React.FC = () => {
 
                 <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
                     <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-                        Livros
+                        IBM Books
                     </h1>
 
                     <div className="flex items-center">
@@ -239,13 +261,16 @@ const Dashboard: React.FC = () => {
                             as="div"
                             className="relative inline-block text-left"
                         >
-                            <input
-                                name="livro"
-                                type="text"
-                                className="text-gray-800 leading-4 p-2 w-full focus:outline-none text-white placeholder-gray-300 rounded-md mr-2 border border-gray-300"
-                                placeholder="Pesquisar"
-                            />
-                            <button type="submit">Botao</button>
+                            <form onSubmit={handleFindBook}>
+                                <input
+                                    name="livro"
+                                    type="text"
+                                    onChange={handleChange}
+                                    className="text-gray-800 leading-4 p-2 w-full focus:outline-none text-white placeholder-gray-300 rounded-md mr-2 border border-gray-300"
+                                    placeholder="Pesquisar"
+                                />
+                                <button type="submit">Botao</button>
+                            </form>
 
                             <Transition
                                 as={Fragment}
@@ -403,7 +428,7 @@ const Dashboard: React.FC = () => {
                             ))}
                         </form>
                         {/* Grid dos produtos */}
-                        {/* <Books data={books} /> */}
+                        <Books data={books} totalResults={totalResults} />
                     </div>
                 </section>
             </div>
