@@ -31,32 +31,6 @@ const sortOptions = [
 
 const subCategories = [{ name: "Meus favoritos", href: "#" }];
 
-const filters = [
-    {
-        id: "author",
-        name: "Autores mais famosos",
-        options: [
-            { value: "1", label: "Lorem Ipsum", checked: false },
-            { value: "2", label: "Lorem Ipsum", checked: false },
-            { value: "3", label: "Lorem Ipsum", checked: true },
-            { value: "4", label: "Lorem Ipsum", checked: false },
-            { value: "5", label: "Lorem Ipsum", checked: false },
-            { value: "6", label: "Lorem Ipsum", checked: false },
-        ],
-    },
-    {
-        id: "category",
-        name: "Categorias",
-        options: [
-            { value: "1", label: "Romance", checked: false },
-            { value: "2", label: "Ação", checked: false },
-            { value: "3", label: "Drama", checked: true },
-            { value: "4", label: "Terror", checked: false },
-            { value: "5", label: "Mangás", checked: false },
-        ],
-    },
-];
-
 const Dashboard: React.FC = () => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const [books, setBooks] = useState<AxiosResponse | null | void>(null);
@@ -70,6 +44,45 @@ const Dashboard: React.FC = () => {
     function classNames(...classes: any) {
         return classes.filter(Boolean).join(" ");
     }
+    console.log("aa", books);
+    const filters = [
+        {
+            id: "author",
+            name: "Autores mais famosos",
+            options: [
+                {
+                    value: "Eiichiro Oda",
+                    label: "Eiichiro Oda",
+                    checked: false,
+                },
+                {
+                    value: "J. K. RowlingLia Wyler",
+                    label: "J. K. RowlingLia Wyler",
+                    checked: false,
+                },
+                {
+                    value: "George R. R. Martin",
+                    label: "George R. R. Martin",
+                    checked: false,
+                },
+                {
+                    value: "J.R.R. Tolkien",
+                    label: "J.R.R. Tolkien",
+                    checked: false,
+                },
+            ],
+        },
+        {
+            id: "category",
+            name: "Categorias",
+            options: [
+                { value: "Computers", label: "Tecnologia", checked: false },
+                { value: "Drama", label: "Drama", checked: false },
+                { value: "Fiction", label: "Ficção", checked: false },
+                { value: "Science", label: "Ciência", checked: false },
+            ],
+        },
+    ];
 
     useEffect(() => {
         api.get(
@@ -104,6 +117,14 @@ const Dashboard: React.FC = () => {
         });
     }
 
+    function handleFindBookCheck(e: any) {
+        api.get(
+            `https://www.googleapis.com/books/v1/volumes?q='${e}&key=${keyID}&maxResults=20`
+        ).then((data) => {
+            setBooks(data.data.items);
+            setTotalResults(data.data.totalItems);
+        });
+    }
     return (
         <div className="bg-white">
             <div>
@@ -218,12 +239,21 @@ const Dashboard: React.FC = () => {
                                                                             <input
                                                                                 id={`filter-mobile-${section.id}-${optionIdx}`}
                                                                                 name={`${section.id}[]`}
-                                                                                defaultValue={
+                                                                                value={
                                                                                     option.value
                                                                                 }
                                                                                 type="checkbox"
                                                                                 defaultChecked={
                                                                                     option.checked
+                                                                                }
+                                                                                onChange={(
+                                                                                    e
+                                                                                ) =>
+                                                                                    handleFindBookCheck(
+                                                                                        e
+                                                                                            .target
+                                                                                            .value
+                                                                                    )
                                                                                 }
                                                                                 className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
                                                                             />
@@ -262,14 +292,29 @@ const Dashboard: React.FC = () => {
                             className="relative inline-block text-left"
                         >
                             <form onSubmit={handleFindBook}>
-                                <input
-                                    name="livro"
-                                    type="text"
-                                    onChange={handleChange}
-                                    className="text-gray-800 leading-4 p-2 w-full focus:outline-none text-white placeholder-gray-300 rounded-md mr-2 border border-gray-300"
-                                    placeholder="Pesquisar"
-                                />
-                                <button type="submit">Botao</button>
+                                <div className="flex items-center justify-center">
+                                    <div className="flex border-2 rounded">
+                                        <input
+                                            type="text"
+                                            className="px-4 py-2 w-80 outline-none"
+                                            onChange={handleChange}
+                                            placeholder="Pesquisar..."
+                                        />
+                                        <button
+                                            type="submit"
+                                            className="flex items-center justify-center px-4 border-l"
+                                        >
+                                            <svg
+                                                className="w-6 h-6 text-gray-600"
+                                                fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
 
                             <Transition
@@ -400,13 +445,19 @@ const Dashboard: React.FC = () => {
                                                                 <input
                                                                     id={`filter-${section.id}-${optionIdx}`}
                                                                     name={`${section.id}[]`}
-                                                                    defaultValue={
+                                                                    value={
                                                                         option.value
                                                                     }
-                                                                    type="checkbox"
-                                                                    defaultChecked={
-                                                                        option.checked
+                                                                    onChange={(
+                                                                        e
+                                                                    ) =>
+                                                                        handleFindBookCheck(
+                                                                            e
+                                                                                .target
+                                                                                .value
+                                                                        )
                                                                     }
+                                                                    type="checkbox"
                                                                     className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
                                                                 />
                                                                 <label

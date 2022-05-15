@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import Capa from "../../Assets/capa_teste.jpg";
+import Capa from "../../Assets/semcapa.png";
 import Rating from "../../Components/Rating";
 import { api } from "../../Services/api";
 
@@ -40,10 +40,7 @@ const BookDetail: React.FC = () => {
                         <img
                             className="w-full"
                             alt="Capa"
-                            src={
-                                detailbook?.imageLinks?.extraLarge ||
-                                detailbook?.imageLinks?.thumbnail
-                            }
+                            src={detailbook?.imageLinks?.thumbnail || Capa}
                         />
                     </div>
                     <div className="md:hidden">
@@ -51,11 +48,7 @@ const BookDetail: React.FC = () => {
                             <img
                                 alt="img-tag-one"
                                 className="md:w-48 md:h-48 w-full"
-                                src={
-                                    detailbook?.imageLinks?.extraLarge ||
-                                    detailbook?.imageLinks?.thumbnail ||
-                                    Capa
-                                }
+                                src={detailbook?.imageLinks?.thumbnail || Capa}
                             />
                         </div>
                     </div>
@@ -70,7 +63,7 @@ const BookDetail: React.FC = () => {
                         </div>
                         <div className="py-4 border-b border-gray-200 flex items-center justify-between">
                             <p className="text-base leading-4 text-gray-800">
-                                Data de publicação
+                                Publicado em:
                             </p>
                             <div className="flex items-center justify-center">
                                 <p className="text-sm leading-none text-gray-600">
