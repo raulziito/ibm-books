@@ -3,8 +3,6 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../../Services/api";
 import { IBookState, IStores } from "./types";
 
-// Define a type for the slice state
-
 const getBook: any = createAsyncThunk(
     "books/get",
     async (
@@ -35,7 +33,6 @@ const paginate: any = createAsyncThunk(
         payload: Record<string, unknown>,
         { dispatch, rejectWithValue, getState, fulfillWithValue }
     ) => {
-        console.log("aquuuuuiii");
         let startIndex: number;
         let pagination: number;
         const state: IStores = getState() as IStores;

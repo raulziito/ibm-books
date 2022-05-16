@@ -33,7 +33,7 @@ function Header() {
     }
 
     const onFailure = (response: any) => {
-        console.log("b");
+        console.log(response);
     };
 
     function closeModal() {

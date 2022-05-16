@@ -21,7 +21,7 @@ const BookDetail: React.FC = () => {
         dispatch(actions.detailBook({ id }));
     }, []);
 
-    console.log(bookState);
+    // console.log(bookState);
     return (
         <>
             <Transition

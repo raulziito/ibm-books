@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { IProfileUser } from "./types";
-// Define a type for the slice state
+
 const initialState: IProfileUser = {
     id: "",
     email: "",
@@ -15,7 +15,6 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            console.log("passei aqui", action.payload.googleId);
             state.id = action.payload.googleId;
             state.email = action.payload.email;
             state.first_name = action.payload.givenName;
@@ -33,6 +32,5 @@ export const userSlice = createSlice({
 });
 const actions = { ...userSlice.actions };
 export { actions };
-// Other code such as selectors can use the imported `RootState` type
 
 export default userSlice.reducer;

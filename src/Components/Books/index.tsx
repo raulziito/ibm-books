@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import semcapa from "../../Assets/semcapa.png";
+import { actions as actionPaginate } from "../../Pages/Redux/books";
 import { actions } from "../../Pages/Redux/favorite";
 import { IFavoriteObjects, IStores } from "../../Pages/Redux/types";
 import Rating from "../Rating";
@@ -75,32 +76,7 @@ function Books(data: any) {
     return (
         <div className="lg:col-span-3">
             <div className="bg-white">
-                {/* <div>
-                    {" "}
-                    <button
-                        type="button"
-                        disabled={bookState.current_page <= 1}
-                        className="bg-blue-500 disabled:bg-blue-100"
-                        onClick={() => {
-                            dispatch(actions.paginate({ paginate: "DOWN" }));
-                        }}
-                    >
-                        VOLTAR
-                    </button>
-                    <button
-                        type="button"
-                        disabled={
-                            bookState.current_page * bookState.per_page >=
-                            bookState.total
-                        }
-                        onClick={() => {
-                            dispatch(actions.paginate({ paginate: "UP" }));
-                        }}
-                        className="bg-blue-500 disabled:bg-blue-100"
-                    >
-                        AVANCAR
-                    </button>
-                </div> */}
+                {/* paginacao aqui? */}
                 <div className="max-w-2xl mx-auto  px-4  sm:px-6 lg:max-w-7xl lg:px-8">
                     <div className="flex items-center justify-start">
                         <span className=" flex-1 font-semibold mb-2">

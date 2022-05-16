@@ -88,7 +88,6 @@ const Dashboard: React.FC = () => {
 
     useEffect(() => {
         if (userState.id) {
-            console.log("sdsdsdsds");
             dispatch(actionsFav.getFav(userState.id));
         }
     }, [userState]);
@@ -99,7 +98,6 @@ const Dashboard: React.FC = () => {
     }
 
     function handleFindBookCheck(e: any) {
-        console.log(e);
         dispatch(
             actions.setFilter({
                 keyword: e,

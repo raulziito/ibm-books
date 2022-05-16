@@ -48,14 +48,7 @@ interface IProps {
 export default function Redux({ children }: IProps) {
     return (
         <Provider store={store}>
-            <PersistGate
-                persistor={persistor}
-                loading={
-                    <div>
-                        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-                    </div>
-                }
-            >
+            <PersistGate persistor={persistor} loading={<div>loading</div>}>
                 {children}
             </PersistGate>
         </Provider>
