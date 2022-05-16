@@ -1,6 +1,7 @@
 import { Disclosure, Menu, Transition, Dialog } from "@headlessui/react";
 import {
     ChevronDownIcon,
+    ChevronRightIcon,
     FilterIcon,
     MinusSmIcon,
     PlusSmIcon,
@@ -9,18 +10,15 @@ import {
 import axios, { AxiosResponse } from "axios";
 import React, { useState, Fragment, useEffect } from "react";
 import { Form, Field } from "react-final-form";
-import {
-    AiFillHeart,
-    AiOutlineHeart,
-    AiOutlineMenu,
-    AiOutlineClose,
-} from "react-icons/ai";
+import { AiFillHeart, AiOutlineClose } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 import Books from "../../Components/Books";
 import { api } from "../../Services/api";
 import { actions } from "../Redux/books";
-import { getFav } from "../Redux/favorite";
+import { actions as actionsFav } from "../Redux/favorite";
+import { IStores, IFavoriteObjects } from "../Redux/types";
 
 const sortOptions = [
     { name: "Mais popular", href: "#", current: true },
@@ -38,8 +36,9 @@ const Dashboard: React.FC = () => {
         return classes.filter(Boolean).join(" ");
     }
 
-    const favoriteState = useSelector((state: any) => state.favorite);
-    const bookState = useSelector((state: any) => state.books);
+    const favoriteState = useSelector((state: IStores) => state.favorite);
+    const bookState = useSelector((state: IStores) => state.books);
+    const userState = useSelector((state: IStores) => state.user);
     const dispatch = useDispatch();
 
     const filters = [
@@ -85,9 +84,14 @@ const Dashboard: React.FC = () => {
         if (bookState.data.length === 0) {
             dispatch(actions.getBook({ keyword: "bem vindo" }));
         }
-
-        dispatch(getFav(10));
     }, []);
+
+    useEffect(() => {
+        if (userState.id) {
+            console.log("sdsdsdsds");
+            dispatch(actionsFav.getFav(userState.id));
+        }
+    }, [userState]);
 
     function handleFindBook(e: any) {
         e.preventDefault();
@@ -153,24 +157,65 @@ const Dashboard: React.FC = () => {
                                             />
                                         </button>
                                     </div>
+                                    <h3 className="sr-only">Categories</h3>
 
+                                    <Disclosure
+                                        as="div"
+                                        key="meusfavoritos"
+                                        className="border-t border-gray-200 border-b-0 px-2 py-6"
+                                    >
+                                        {({ open }) => (
+                                            <>
+                                                <Disclosure.Button className="px-2 bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
+                                                    <p className="flex items-center font-medium text-gray-900">
+                                                        <AiFillHeart className="text-plastic-pink mr-2" />
+                                                        Meus Favoritos
+                                                    </p>
+                                                    <p className="ml-6 flex items-center">
+                                                        {open ? (
+                                                            <MinusSmIcon
+                                                                className="h-5 w-5"
+                                                                aria-hidden="true"
+                                                            />
+                                                        ) : (
+                                                            <PlusSmIcon
+                                                                className="h-5 w-5"
+                                                                aria-hidden="true"
+                                                            />
+                                                        )}
+                                                    </p>
+                                                </Disclosure.Button>
+
+                                                <Disclosure.Panel className="">
+                                                    <div className="p-4 ">
+                                                        {favoriteState.favorite.map(
+                                                            (
+                                                                item: IFavoriteObjects
+                                                            ) => (
+                                                                <Link
+                                                                    className="flex hover:bg-gray-100 duration-200 p-2"
+                                                                    key={
+                                                                        item.bookId
+                                                                    }
+                                                                    to={{
+                                                                        pathname: `/book-detail/${item.bookId}`,
+                                                                    }}
+                                                                >
+                                                                    <p className="px-10 flex items-center justify-center ">
+                                                                        {
+                                                                            item.bookName
+                                                                        }
+                                                                    </p>
+                                                                </Link>
+                                                            )
+                                                        )}
+                                                    </div>
+                                                </Disclosure.Panel>
+                                            </>
+                                        )}
+                                    </Disclosure>
                                     {/* Filters */}
-                                    <form className="mt-4 border-t border-gray-200">
-                                        <h3 className="sr-only">Categories</h3>
-                                        <ul className="font-medium text-gray-900 px-2 py-3">
-                                            {subCategories.map((category) => (
-                                                <li key={category.name}>
-                                                    <a
-                                                        href={category.href}
-                                                        className="px-2 py-3 flex items-center"
-                                                    >
-                                                        <AiFillHeart className="text-plastic-pink mr-2" />{" "}
-                                                        {category.name}
-                                                    </a>
-                                                </li>
-                                            ))}
-                                        </ul>
-
+                                    <form className="border-t border-gray-200">
                                         {filters.map((section) => (
                                             <Disclosure
                                                 as="div"
@@ -259,101 +304,49 @@ const Dashboard: React.FC = () => {
                     </Dialog>
                 </Transition.Root>
 
-                <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
-                    <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+                <div className="relative z-10 flex flex-col md:flex-row items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
+                    <h1 className="text-4xl flex-1 font-extrabold tracking-tight text-gray-900">
                         IBM Books
                     </h1>
-
-                    <div className="flex items-center">
-                        <Menu
-                            as="div"
-                            className="relative inline-block text-left"
-                        >
-                            <form onSubmit={handleFindBook}>
-                                <div className="flex items-center justify-center">
-                                    <div className="flex border-2 rounded">
-                                        <input
-                                            type="text"
-                                            value={bookState.keyword}
-                                            className="px-4 py-2 w-80 outline-none"
-                                            onChange={(e) =>
-                                                dispatch(
-                                                    actions.setFilter({
-                                                        keyword: e.target.value,
-                                                    })
-                                                )
-                                            }
-                                            placeholder="Pesquisar..."
-                                        />
-                                        <button
-                                            type="submit"
-                                            className="flex items-center justify-center px-4 border-l"
-                                        >
-                                            <svg
-                                                className="w-6 h-6 text-gray-600"
-                                                fill="currentColor"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 24 24"
-                                            >
-                                                <path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-100"
-                                enterFrom="transform opacity-0 scale-95"
-                                enterTo="transform opacity-100 scale-100"
-                                leave="transition ease-in duration-75"
-                                leaveFrom="transform opacity-100 scale-100"
-                                leaveTo="transform opacity-0 scale-95"
-                            >
-                                <Menu.Items className="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                    <div className="py-1">
-                                        {sortOptions.map((option) => (
-                                            <Menu.Item key={option.name}>
-                                                {({ active }) => (
-                                                    <a
-                                                        href={option.href}
-                                                        className={classNames(
-                                                            option.current
-                                                                ? "font-medium text-gray-900"
-                                                                : "text-gray-500",
-                                                            active
-                                                                ? "bg-gray-100"
-                                                                : "",
-                                                            "block px-4 py-2 text-sm"
-                                                        )}
-                                                    >
-                                                        {option.name}
-                                                    </a>
-                                                )}
-                                            </Menu.Item>
-                                        ))}
-                                    </div>
-                                </Menu.Items>
-                            </Transition>
-                        </Menu>
+                    <div className="h-2 md:h-0" />
+                    <div className="flex flex-wrap">
+                        <div className="flex items-center justify-center">
+                            <div className="flex shrink border-2 rounded">
+                                <input
+                                    type="text"
+                                    value={bookState.keyword}
+                                    className="px-4 py-2 shrink outline-none"
+                                    onChange={(e) =>
+                                        dispatch(
+                                            actions.setFilter({
+                                                keyword: e.target.value,
+                                            })
+                                        )
+                                    }
+                                    placeholder="Pesquisar..."
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleFindBook}
+                                    className="flex items-center justify-center px-4 border-l"
+                                >
+                                    <svg
+                                        className="w-6 h-6 text-gray-600"
+                                        fill="currentColor"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
 
                         <button
                             type="button"
-                            className="p-2 -m-2 ml-5 sm:ml-7 text-gray-400 hover:text-gray-500"
-                        >
-                            <span className="sr-only">Ver a grid</span>
-                            <ViewGridIcon
-                                className="w-5 h-5"
-                                aria-hidden="true"
-                            />
-                        </button>
-                        <button
-                            type="button"
-                            className="p-2 -m-2 ml-4 sm:ml-6 text-gray-400 hover:text-gray-500 lg:hidden"
+                            className="p-2 pl-6 flex-1 flex justify-center items-center text-gray-400 hover:text-gray-500 lg:hidden"
                             onClick={() => setMobileFiltersOpen(true)}
                         >
-                            <span className="sr-only">Filtros</span>
                             <FilterIcon
                                 className="w-5 h-5"
                                 aria-hidden="true"

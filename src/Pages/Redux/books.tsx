@@ -1,23 +1,9 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { start } from "repl";
 
 import { api } from "../../Services/api";
+import { IBookState, IStores } from "./types";
 
 // Define a type for the slice state
-interface IBookState {
-    data: Array<Record<string, unknown>>;
-    total: number;
-    current_page: number;
-    per_page: number;
-    keyword: string;
-    description: Record<string, unknown>;
-    loading: boolean;
-    error: boolean;
-}
-
-interface IStores {
-    books: IBookState;
-}
 
 const getBook: any = createAsyncThunk(
     "books/get",
@@ -94,17 +80,6 @@ const detailBook: any = createAsyncThunk(
             })
 );
 
-interface IBookState {
-    data: Array<Record<string, unknown>>;
-    total: number;
-    current_page: number;
-    per_page: number;
-    keyword: string;
-    description: Record<string, unknown>;
-    loading: boolean;
-    error: boolean;
-}
-
 // Define the initial state using that type
 const initialState: IBookState = {
     data: [],
@@ -117,7 +92,7 @@ const initialState: IBookState = {
     description: {},
 };
 
-export const counterSlice = createSlice({
+export const bookSlice = createSlice({
     name: "counter",
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
@@ -174,9 +149,9 @@ export const counterSlice = createSlice({
     },
 });
 
-const actions = { ...counterSlice.actions, getBook, detailBook, paginate };
+const actions = { ...bookSlice.actions, getBook, detailBook, paginate };
 export { actions };
 
 // Other code such as selectors can use the imported `RootState` type
 
-export default counterSlice.reducer;
+export default bookSlice.reducer;

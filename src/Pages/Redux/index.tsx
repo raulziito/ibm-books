@@ -9,10 +9,12 @@ import storageSession from "redux-persist/lib/storage/session";
 
 import BookReducer from "./books";
 import FavoriteReducer from "./favorite";
+import userReducer from "./user";
 
 const reducers = combineReducers({
     books: BookReducer,
     favorite: FavoriteReducer,
+    user: userReducer,
 });
 
 const persistConfig = {

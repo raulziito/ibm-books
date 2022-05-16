@@ -1,22 +1,81 @@
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { HeartIcon as OutlinedHeart } from "@heroicons/react/outline";
+import { HeartIcon as FillHeart } from "@heroicons/react/solid";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import semcapa from "../../Assets/semcapa.png";
-import { actions } from "../../Pages/Redux/books";
+import { actions } from "../../Pages/Redux/favorite";
+import { IFavoriteObjects, IStores } from "../../Pages/Redux/types";
 import Rating from "../Rating";
 
 function Books(data: any) {
-    const bookState = useSelector((state: any) => state.books);
-    const dispatch = useDispatch();
-    const toggleFavorite = (product: number) => {
-        console.log(product);
-    };
+    const bookState = useSelector((state: IStores) => state.books);
+    const favoriteState = useSelector((state: IStores) => state.favorite);
+    const userState = useSelector((state: IStores) => state.user);
 
+    const dispatch = useDispatch();
+
+    function isIncluded(id: string) {
+        const inside = favoriteState.favorite.filter(
+            (i: IFavoriteObjects) => i.bookId === id
+        );
+        if (inside.length > 0) {
+            return true;
+        }
+        return false;
+    }
+    function returnHeart(id: string, name: string) {
+        if (!userState.id) {
+            return (
+                <button type="button" className="cursor-pointer relative">
+                    <FillHeart className=" h-6 w-6 text-gray-400  left-0.5 top-0.5 check transition " />
+                </button>
+            );
+        }
+        if (userState.id && isIncluded(id)) {
+            return (
+                <button
+                    onClick={() => {
+                        dispatch(
+                            actions.deleteFav({
+                                id: favoriteState.favorite.filter(
+                                    (i: IFavoriteObjects) => i.bookId === id
+                                )[0].id,
+                            })
+                        );
+                    }}
+                    type="button"
+                    className="cursor-pointer relative"
+                >
+                    <FillHeart className="h-6 w-6 text-pink-600 hover:text-pink-700  hover:scale-110 duration-200  " />
+                </button>
+            );
+        }
+        if (userState && !isIncluded(id)) {
+            return (
+                <button
+                    onClick={() => {
+                        dispatch(
+                            actions.postFav({
+                                bookName: name,
+                                user: userState.id,
+                                bookId: id,
+                            })
+                        );
+                    }}
+                    type="button"
+                    className="cursor-pointer relative"
+                >
+                    <OutlinedHeart className="h-6 w-6 text-pink-600 hover:text-pink-700  hover:scale-110 duration-200" />
+                </button>
+            );
+        }
+        return null;
+    }
     return (
         <div className="lg:col-span-3">
             <div className="bg-white">
-                <div>
+                {/* <div>
                     {" "}
                     <button
                         type="button"
@@ -41,7 +100,7 @@ function Books(data: any) {
                     >
                         AVANCAR
                     </button>
-                </div>
+                </div> */}
                 <div className="max-w-2xl mx-auto  px-4  sm:px-6 lg:max-w-7xl lg:px-8">
                     <div className="flex items-center justify-start">
                         <span className=" flex-1 font-semibold mb-2">
@@ -78,22 +137,10 @@ function Books(data: any) {
                                     </Link>
 
                                     <div className="flex items-center justify-between  pt-4">
-                                        <label className="cursor-pointer relative">
-                                            <input
-                                                name="favorite"
-                                                type="checkbox"
-                                                id="check-box"
-                                                value={product.id}
-                                                className="appearance-none h-7 w-7 border-2 rounded-full bg-red-50 border-none "
-                                            />
-                                            <AiOutlineHeart
-                                                className={`text-8xl h-6 w-6 text-plastic-pink absolute left-0.5 top-0.5 text-opacity-100 transition `}
-                                            />
-                                            <AiFillHeart
-                                                className={`text-8xl h-6 w-6 text-plastic-pink absolute left-0.5 top-0.5 text-opacity-0 check transition `}
-                                            />
-                                        </label>
-
+                                        {returnHeart(
+                                            product.id,
+                                            product?.volumeInfo?.title
+                                        )}
                                         <div className="bg-gray-100 py-1.5 px-6 rounded-full text-xs text-gray-500 text-ellipsis truncate">
                                             {product?.volumeInfo?.categories ||
                                                 "Sem descrição"}
