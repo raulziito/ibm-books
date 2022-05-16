@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { api } from "../../Services/api";
+import { api } from "../../Microservico/api";
 import { IFavoriteObjects, IFavoriteState } from "./types";
 
 const getFav: any = createAsyncThunk(
