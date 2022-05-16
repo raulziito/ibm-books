@@ -2,13 +2,13 @@ import { Provider } from "react-redux";
 
 import RoutesWrapper from "./routes";
 import "./App.css";
-import store from "./Pages/Redux";
+import Redux from "./Pages/Redux";
 
 const App: React.FC = () => {
     return (
-        <Provider store={store}>
+        <Redux>
             <RoutesWrapper />
-        </Provider>
+        </Redux>
     );
 };
 

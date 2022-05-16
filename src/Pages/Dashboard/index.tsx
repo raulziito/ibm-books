@@ -19,7 +19,8 @@ import { useSelector, useDispatch } from "react-redux";
 
 import Books from "../../Components/Books";
 import { api } from "../../Services/api";
-import { getFav } from "../Redux/store";
+import { actions } from "../Redux/books";
+import { getFav } from "../Redux/favorite";
 
 const sortOptions = [
     { name: "Mais popular", href: "#", current: true },
@@ -33,18 +34,14 @@ const subCategories = [{ name: "Meus favoritos", href: "#" }];
 
 const Dashboard: React.FC = () => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-    const [books, setBooks] = useState<AxiosResponse | null | void>(null);
-    const [book, setBook] = useState("ibm");
-    const [totalResults, setTotalResults] =
-        useState<AxiosResponse | null | void>(null);
-    const keyID = "AIzaSyA4yCYQJ6my93smp5OsRivKxv8vArvg2d8";
-    const dispatch = useDispatch();
-    const favoriteState = useSelector((state: any) => state.favorite);
-
     function classNames(...classes: any) {
         return classes.filter(Boolean).join(" ");
     }
-    console.log("aa", books);
+
+    const favoriteState = useSelector((state: any) => state.favorite);
+    const bookState = useSelector((state: any) => state.books);
+    const dispatch = useDispatch();
+
     const filters = [
         {
             id: "author",
@@ -85,45 +82,26 @@ const Dashboard: React.FC = () => {
     ];
 
     useEffect(() => {
-        api.get(
-            `https://www.googleapis.com/books/v1/volumes?q='${book}&key=${keyID}&maxResults=8`
-        ).then((data) => {
-            setBooks(data.data.items);
-            setTotalResults(data.data.totalItems);
-        });
-    }, []);
+        if (bookState.data.length === 0) {
+            dispatch(actions.getBook({ keyword: "bem vindo" }));
+        }
 
-    useEffect(() => {
         dispatch(getFav(10));
     }, []);
 
-    useEffect(() => {
-        console.log("I");
-    }, [favoriteState]);
-
-    function handleChange(e: any) {
-        const book = e.target.value;
-        setBook(book);
-    }
-
     function handleFindBook(e: any) {
         e.preventDefault();
-
-        api.get(
-            `https://www.googleapis.com/books/v1/volumes?q='${book}&key=${keyID}&maxResults=20`
-        ).then((data) => {
-            setBooks(data.data.items);
-            setTotalResults(data.data.totalItems);
-        });
+        dispatch(actions.getBook({ keyword: bookState.keyword }));
     }
 
     function handleFindBookCheck(e: any) {
-        api.get(
-            `https://www.googleapis.com/books/v1/volumes?q='${e}&key=${keyID}&maxResults=20`
-        ).then((data) => {
-            setBooks(data.data.items);
-            setTotalResults(data.data.totalItems);
-        });
+        console.log(e);
+        dispatch(
+            actions.setFilter({
+                keyword: e,
+            })
+        );
+        dispatch(actions.getBook({ keyword: e }));
     }
     return (
         <div className="bg-white">
@@ -296,8 +274,15 @@ const Dashboard: React.FC = () => {
                                     <div className="flex border-2 rounded">
                                         <input
                                             type="text"
+                                            value={bookState.keyword}
                                             className="px-4 py-2 w-80 outline-none"
-                                            onChange={handleChange}
+                                            onChange={(e) =>
+                                                dispatch(
+                                                    actions.setFilter({
+                                                        keyword: e.target.value,
+                                                    })
+                                                )
+                                            }
                                             placeholder="Pesquisar..."
                                         />
                                         <button
@@ -479,7 +464,10 @@ const Dashboard: React.FC = () => {
                             ))}
                         </form>
                         {/* Grid dos produtos */}
-                        <Books data={books} totalResults={totalResults} />
+                        <Books
+                            data={bookState.data}
+                            totalResults={bookState.total}
+                        />
                     </div>
                 </section>
             </div>

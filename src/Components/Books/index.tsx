@@ -1,13 +1,14 @@
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import semcapa from "../../Assets/semcapa.png";
+import { actions } from "../../Pages/Redux/books";
 import Rating from "../Rating";
 
 function Books(data: any) {
-    const newData = data;
-    const showResults = data;
-    console.log(showResults.totalResults);
+    const bookState = useSelector((state: any) => state.books);
+    const dispatch = useDispatch();
     const toggleFavorite = (product: number) => {
         console.log(product);
     };
@@ -15,13 +16,46 @@ function Books(data: any) {
     return (
         <div className="lg:col-span-3">
             <div className="bg-white">
+                <div>
+                    {" "}
+                    <button
+                        type="button"
+                        disabled={bookState.current_page <= 1}
+                        className="bg-blue-500 disabled:bg-blue-100"
+                        onClick={() => {
+                            dispatch(actions.paginate({ paginate: "DOWN" }));
+                        }}
+                    >
+                        VOLTAR
+                    </button>
+                    <button
+                        type="button"
+                        disabled={
+                            bookState.current_page * bookState.per_page >=
+                            bookState.total
+                        }
+                        onClick={() => {
+                            dispatch(actions.paginate({ paginate: "UP" }));
+                        }}
+                        className="bg-blue-500 disabled:bg-blue-100"
+                    >
+                        AVANCAR
+                    </button>
+                </div>
                 <div className="max-w-2xl mx-auto  px-4  sm:px-6 lg:max-w-7xl lg:px-8">
-                    <span className="font-semibold mb-2">
-                        {showResults.totalResults} livro(s) encontrado(s)
-                    </span>
+                    <div className="flex items-center justify-start">
+                        <span className=" flex-1 font-semibold mb-2">
+                            {bookState.total} livro(s) encontrado(s)
+                        </span>
+                        <span>
+                            {" "}
+                            {bookState.current_page}/
+                            {(bookState.total / bookState.per_page).toFixed(0)}{" "}
+                        </span>
+                    </div>
 
                     <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 py-4">
-                        {newData?.data?.map((product: any) => {
+                        {bookState.data.map((product: any) => {
                             return (
                                 <div className="group">
                                     <Link
