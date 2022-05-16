@@ -15,18 +15,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Books from "../../Components/Books";
-import { api } from "../../Services/api";
+import { api } from "../../Microservice/api";
 import { actions } from "../Redux/books";
 import { actions as actionsFav } from "../Redux/favorite";
 import { IStores, IFavoriteObjects } from "../Redux/types";
-
-const sortOptions = [
-    { name: "Mais popular", href: "#", current: true },
-    { name: "Melhor avaliação", href: "#", current: false },
-    { name: "Novos", href: "#", current: false },
-    { name: "Preço: Menor para maior", href: "#", current: false },
-    { name: "Price: Maior para menor", href: "#", current: false },
-];
 
 const subCategories = [{ name: "Meus favoritos", href: "#" }];
 

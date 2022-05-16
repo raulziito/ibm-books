@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 
 import Capa from "../../Assets/semcapa.png";
 import Rating from "../../Components/Rating";
-import { api } from "../../Services/api";
+import { api } from "../../Microservice/api";
 import { actions } from "../Redux/books";
 
 const BookDetail: React.FC = () => {

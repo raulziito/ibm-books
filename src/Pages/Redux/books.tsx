@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { api } from "../../Services/api";
+import { api } from "../../Microservice/api";
 import { IBookState, IStores } from "./types";
 
 const getBook: any = createAsyncThunk(
@@ -135,7 +135,7 @@ export const bookSlice = createSlice({
         [paginate.fulfilled]: (state, action) => {
             state.error = false;
             state.loading = false;
-            state.data = action.payload.data;
+            state.data = [...state.data, ...action.payload.data];
             state.current_page += action.payload.pagination;
             state.total = action.payload.total;
         },

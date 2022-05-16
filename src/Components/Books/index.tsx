@@ -1,5 +1,6 @@
 import { HeartIcon as OutlinedHeart } from "@heroicons/react/outline";
 import { HeartIcon as FillHeart } from "@heroicons/react/solid";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -73,6 +74,10 @@ function Books(data: any) {
         }
         return null;
     }
+    const scrollTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
     return (
         <div className="lg:col-span-3">
             <div className="bg-white">
@@ -80,12 +85,7 @@ function Books(data: any) {
                 <div className="max-w-2xl mx-auto  px-4  sm:px-6 lg:max-w-7xl lg:px-8">
                     <div className="flex items-center justify-start">
                         <span className=" flex-1 font-semibold mb-2">
-                            {bookState.total} livro(s) encontrado(s)
-                        </span>
-                        <span>
-                            {" "}
-                            {bookState.current_page}/
-                            {(bookState.total / bookState.per_page).toFixed(0)}{" "}
+                            {bookState.total} Resultado(s)
                         </span>
                     </div>
 
@@ -139,6 +139,43 @@ function Books(data: any) {
                             );
                         })}
                     </div>
+                    <div className="flex justify-center">
+                        <button
+                            type="button"
+                            hidden={
+                                bookState.current_page * bookState.per_page >=
+                                bookState.total
+                            }
+                            className="bg-gray-800 rounded p-3 text-white transition ease-in-out delay-250 hover:-translate-y-1 hover:scale-120 hover:bg-gray-700"
+                            onClick={() => {
+                                dispatch(
+                                    actionPaginate.paginate({ paginate: "UP" })
+                                );
+                            }}
+                        >
+                            Descobrir mais
+                        </button>
+                    </div>
+                    <button
+                        onClick={() => scrollTop()}
+                        type="button"
+                        className="fixed  bottom-14 bg-gray-500 rounded-full p-3 w-12 h-12 z-30 text-white  right-14 hover:bg-gray-700 transition duration-150 ease-in-out focus:outline-none"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M5 15l7-7 7 7"
+                            />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
