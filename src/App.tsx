@@ -1,8 +1,6 @@
-import { Provider } from "react-redux";
-
+import Redux from "./Redux";
 import RoutesWrapper from "./routes";
 import "./App.css";
-import Redux from "./Redux";
 
 const App: React.FC = () => {
     return (

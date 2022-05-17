@@ -12,7 +12,12 @@ function Rating(rating: any) {
                 const ratingValue = i + 1;
                 return (
                     <label>
-                        <input type="radio" className="rating" name="rating" />
+                        <input
+                            key={item}
+                            type="radio"
+                            className="rating"
+                            name="rating"
+                        />
                         <AiFillStar
                             size={20}
                             color={

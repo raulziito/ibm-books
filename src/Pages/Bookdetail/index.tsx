@@ -13,8 +13,8 @@ const BookDetail: React.FC = () => {
     const [show, setShow] = useState(false);
     const [show2, setShow2] = useState(false);
     const [books, setBooks] = useState<Array<object | unknown>>([]);
-    const { id } = useParams();
     const bookState = useSelector((state: any) => state.books);
+    const { id } = useParams();
     const dispatch = useDispatch();
 
     useEffect(() => {
