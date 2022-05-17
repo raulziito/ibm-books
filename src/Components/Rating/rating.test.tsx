@@ -7,7 +7,5 @@ describe("<Rating></Rating>", () => {
         render(<Rating />);
 
         const ratingValue = screen.getAllByRole("radio");
-        console.log("a", ratingValue);
-        // expect(ratingValue).toHaveClass("rating");
     });
 });

@@ -165,7 +165,7 @@ const Dashboard: React.FC = () => {
                                                 </Disclosure.Button>
 
                                                 <Disclosure.Panel className="">
-                                                    <div className="bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500 ">
+                                                    <div className="bg-white w-full flex flex-wrap items-center justify-between text-gray-400 hover:text-gray-500 ">
                                                         {favoriteState.favorite.map(
                                                             (
                                                                 item: IFavoriteObjects
@@ -401,7 +401,7 @@ const Dashboard: React.FC = () => {
                                             </Disclosure.Button>
 
                                             <Disclosure.Panel className="">
-                                                <div className="bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
+                                                <div className="bg-white w-full flex flex-wrap items-center justify-between text-gray-400 hover:text-gray-500 overflow-y-auto h-32">
                                                     {favoriteState.favorite.map(
                                                         (
                                                             item: IFavoriteObjects

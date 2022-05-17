@@ -13,123 +13,28 @@
   ],
   "favorites": [
     {
-      "id": 2,
-      "user": 1,
-      "bookId": 2
+      "user": "116616235255852024388",
+      "bookId": "xEApjgEACAAJ",
+      "bookName": "React.Js Essentials",
+      "id": 1
     },
     {
-      "id": 3,
-      "user": 1,
-      "bookId": 3
+      "user": "116616235255852024388",
+      "bookId": "MWkOEAAAQBAJ",
+      "bookName": "React Aprenda Praticando",
+      "id": 2
     },
     {
-      "id": 4,
-      "user": 1,
-      "bookId": 4
+      "user": "116616235255852024388",
+      "bookId": "S8gBMQAACAAJ",
+      "bookName": "React in Action",
+      "id": 3
     },
     {
-      "id": 5,
-      "user": 1,
-      "bookId": 5
-    },
-    {
-      "user": 1,
-      "bookId": 1,
-      "id": 6
-    },
-    {
-      "user": 1,
-      "bookId": 1,
-      "id": 7
-    },
-    {
-      "user": 3,
-      "bookId": 4,
-      "id": 8
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "IP8-_5G8CtkC",
-      "bookName": "One Piece, Vol. 18",
-      "id": 9
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "rsgEkgEACAAJ",
-      "bookName": "Green, secret pieces",
-      "id": 11
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "gJcJEAAAQBAJ",
-      "bookName": "One Piece, Vol. 95",
-      "id": 12
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "Rr_qtgEACAAJ",
-      "bookName": "One Piece",
-      "id": 13
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "c_aYpwAACAAJ",
-      "bookName": "Cronicas De Gelo E Fogo, V.4 - O Festim Dos Corvos",
-      "id": 14
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "c53OAgAAQBAJ",
-      "bookName": "A Dança dos Dragões",
-      "id": 15
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "m3lvDwAAQBAJ",
-      "bookName": "Fogo & Sangue – Volume 1",
-      "id": 16
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "DLKMDwAAQBAJ",
-      "bookName": "A guerra dos tronos",
-      "id": 17
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "6SniBAAAQBAJ",
-      "bookName": "The Ice Dragon",
-      "id": 18
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "6sJQMs6WyQcC",
-      "bookName": "Beyond the Wall",
-      "id": 19
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "Rr_qtgEACAAJ",
-      "bookName": "One Piece",
-      "id": 20
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "gJcJEAAAQBAJ",
-      "bookName": "One Piece, Vol. 95",
-      "id": 21
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "udXrXwAACAAJ",
-      "bookName": "One Piece Film Strong World Eiichiro Oda Artbook",
-      "id": 22
-    },
-    {
-      "user": "113793537326978527448",
-      "bookId": "IP8-_5G8CtkC",
-      "bookName": "One Piece, Vol. 18",
-      "id": 23
+      "user": "116616235255852024388",
+      "bookId": "NZCKCgAAQBAJ",
+      "bookName": "Introduction to React",
+      "id": 4
     }
   ]
 }

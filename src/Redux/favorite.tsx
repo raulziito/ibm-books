@@ -60,7 +60,6 @@ const initialState: IFavoriteState = {
 
 export const favoriteSlice = createSlice({
     name: "counter",
-
     initialState,
     reducers: {},
     extraReducers: {
