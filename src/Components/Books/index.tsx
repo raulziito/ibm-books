@@ -11,8 +11,8 @@ import Rating from "../Rating";
 
 function Books(data: any) {
     const bookState = useSelector((state: IStores) => state.books);
-    const favoriteState = useSelector((state: IStores) => state.favorite);
     const userState = useSelector((state: IStores) => state.user);
+    const favoriteState = useSelector((state: IStores) => state.favorite);
 
     const dispatch = useDispatch();
 

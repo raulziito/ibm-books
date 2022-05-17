@@ -1,7 +1,10 @@
+/* eslint-disable no-self-compare */
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import { Disclosure, Menu, Transition, Dialog } from "@headlessui/react";
 import { FilterIcon, MinusSmIcon, PlusSmIcon } from "@heroicons/react/solid";
 import React, { useState, Fragment, useEffect } from "react";
 import { AiFillHeart, AiOutlineClose } from "react-icons/ai";
+import { FiTrash } from "react-icons/fi";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -81,6 +84,7 @@ const Dashboard: React.FC = () => {
         );
         dispatch(actions.getBook({ keyword: e }));
     }
+
     return (
         <div className="bg-white">
             <div>
@@ -161,26 +165,54 @@ const Dashboard: React.FC = () => {
                                                 </Disclosure.Button>
 
                                                 <Disclosure.Panel className="">
-                                                    <div className="p-4 ">
+                                                    <div className="bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500 ">
                                                         {favoriteState.favorite.map(
                                                             (
                                                                 item: IFavoriteObjects
                                                             ) => (
-                                                                <Link
-                                                                    className="flex hover:bg-gray-100 duration-200 p-2"
-                                                                    key={
-                                                                        item.bookId
-                                                                    }
-                                                                    to={{
-                                                                        pathname: `/book-detail/${item.bookId}`,
-                                                                    }}
-                                                                >
-                                                                    <p className="px-10 flex items-center justify-center ">
-                                                                        {
-                                                                            item.bookName
+                                                                <>
+                                                                    <Link
+                                                                        className="flex duration-200 p-2"
+                                                                        key={
+                                                                            item.bookId
                                                                         }
-                                                                    </p>
-                                                                </Link>
+                                                                        to={{
+                                                                            pathname: `/book-detail/${item.bookId}`,
+                                                                        }}
+                                                                    >
+                                                                        <p className=" flex items-center justify-center ">
+                                                                            {
+                                                                                item.bookName
+                                                                            }
+                                                                        </p>
+                                                                    </Link>
+                                                                    <button
+                                                                        onClick={() => {
+                                                                            dispatch(
+                                                                                actionsFav.deleteFav(
+                                                                                    {
+                                                                                        id: favoriteState.favorite.filter(
+                                                                                            (
+                                                                                                item: IFavoriteObjects
+                                                                                            ) =>
+                                                                                                item.bookId ===
+                                                                                                item.bookId
+                                                                                        )[0]
+                                                                                            .id,
+                                                                                    }
+                                                                                )
+                                                                            );
+                                                                        }}
+                                                                        type="button"
+                                                                        className="bg-gray-200 rounded-full p-1 hover:bg-red-200"
+                                                                    >
+                                                                        <FiTrash
+                                                                            size={
+                                                                                20
+                                                                            }
+                                                                        />
+                                                                    </button>
+                                                                </>
                                                             )
                                                         )}
                                                     </div>
@@ -369,26 +401,54 @@ const Dashboard: React.FC = () => {
                                             </Disclosure.Button>
 
                                             <Disclosure.Panel className="">
-                                                <div className="p-4 ">
+                                                <div className="bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
                                                     {favoriteState.favorite.map(
                                                         (
                                                             item: IFavoriteObjects
                                                         ) => (
-                                                            <Link
-                                                                className="flex hover:bg-gray-100 duration-200 p-2"
-                                                                key={
-                                                                    item.bookId
-                                                                }
-                                                                to={{
-                                                                    pathname: `/book-detail/${item.bookId}`,
-                                                                }}
-                                                            >
-                                                                <p className="px-10 flex items-center justify-center ">
-                                                                    {
-                                                                        item.bookName
+                                                            <>
+                                                                <Link
+                                                                    className="flex  duration-200 p-2"
+                                                                    key={
+                                                                        item.bookId
                                                                     }
-                                                                </p>
-                                                            </Link>
+                                                                    to={{
+                                                                        pathname: `/book-detail/${item.bookId}`,
+                                                                    }}
+                                                                >
+                                                                    <p className=" flex items-center justify-center ">
+                                                                        {
+                                                                            item.bookName
+                                                                        }
+                                                                    </p>
+                                                                </Link>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        dispatch(
+                                                                            actionsFav.deleteFav(
+                                                                                {
+                                                                                    id: favoriteState.favorite.filter(
+                                                                                        (
+                                                                                            item: IFavoriteObjects
+                                                                                        ) =>
+                                                                                            item.bookId ===
+                                                                                            item.bookId
+                                                                                    )[0]
+                                                                                        .id,
+                                                                                }
+                                                                            )
+                                                                        );
+                                                                    }}
+                                                                    type="button"
+                                                                    className="bg-gray-200 rounded-full p-1 hover:bg-red-200"
+                                                                >
+                                                                    <FiTrash
+                                                                        size={
+                                                                            20
+                                                                        }
+                                                                    />
+                                                                </button>
+                                                            </>
                                                         )
                                                     )}
                                                 </div>
