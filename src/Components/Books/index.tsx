@@ -1,6 +1,5 @@
 import { HeartIcon as OutlinedHeart } from "@heroicons/react/outline";
 import { HeartIcon as FillHeart } from "@heroicons/react/solid";
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 

@@ -13,7 +13,7 @@ const getBook: any = createAsyncThunk(
 
         return api
             .get(
-                `https://www.googleapis.com/books/v1/volumes?q='${state.books.keyword}&key=${process.env.REACT_APP_GOOGLE_KEY}&maxResults=8`
+                `https://www.googleapis.com/books/v1/volumes?q='${state.books.keyword}&key=${process.env.REACT_APP_GOOGLE_KEY}&maxResults=4`
             )
             .then((res) => ({
                 data: res.data.items ? res.data.items : [],
@@ -100,6 +100,7 @@ export const bookSlice = createSlice({
     },
     extraReducers: {
         [getBook.pending]: (state, action) => {
+            console.log("aqui", state.loading);
             state.loading = true;
             state.error = false;
         },

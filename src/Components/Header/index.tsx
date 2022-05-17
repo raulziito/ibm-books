@@ -9,11 +9,16 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 
 import Logo from "../../Assets/logo.png";
+import { api } from "../../Microservice/api";
 import { actions } from "../../Pages/Redux/user";
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false);
-    const [profile, setProfile] = useState([]);
+    const [profile, setProfile] = useState<{
+        id: string;
+        name: string;
+        email: string;
+    }>();
 
     const userState = useSelector((state: any) => state.user);
 
@@ -27,10 +32,6 @@ function Header() {
 
     const clientId =
         "800255309224-te5imahr4d5q2nmjl3mbu7icssne7eb5.apps.googleusercontent.com";
-    function onSuccess(response: any) {
-        // dispatch(actions.getUser(response));
-        // setProfile(resposta);
-    }
 
     const onFailure = (response: any) => {
         console.log(response);
@@ -46,9 +47,6 @@ function Header() {
         }
     }
 
-    function classNames(...classes: any) {
-        return classes.filter(Boolean).join(" ");
-    }
     useEffect(() => {
         function start() {
             gapi.client.init({
@@ -58,6 +56,17 @@ function Header() {
         }
         gapi.load("client:auth2", start);
     }, []);
+
+    const onSubmit = async (values: any) => {
+        api.get(`users?email=${values.email}`)
+            .then((response: any) => {
+                setProfile(response.data[0]);
+                closeModal();
+            })
+            .catch((err) => {
+                return console.log(err);
+            });
+    };
 
     return (
         <Disclosure as="nav" className="bg-gray-800">
@@ -82,16 +91,20 @@ function Header() {
                         </div>
                         <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                             <div className="flex-shrink-0 flex items-center">
-                                <img
-                                    alt="ibm"
-                                    className="block lg:hidden h-8 w-auto"
-                                    src={Logo}
-                                />
-                                <img
-                                    className="hidden lg:block h-8 w-auto"
-                                    src={Logo}
-                                    alt="Workflow"
-                                />
+                                <a href="/">
+                                    <img
+                                        alt="ibm"
+                                        className="block lg:hidden h-8 w-auto"
+                                        src={Logo}
+                                    />
+                                </a>
+                                <a href="/">
+                                    <img
+                                        className="hidden lg:block h-8 w-auto"
+                                        src={Logo}
+                                        alt="Workflow"
+                                    />
+                                </a>
                             </div>
                         </div>
                         <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -101,6 +114,7 @@ function Header() {
                                 className="ml-3 relative flex items-center"
                             >
                                 <FaRegUserCircle className="text-white mr-2" />
+
                                 <button
                                     type="button"
                                     onClick={openModal}
@@ -108,9 +122,26 @@ function Header() {
                                 >
                                     {userState.id
                                         ? userState.name
+                                        : profile?.id
+                                        ? profile?.name
                                         : "Seu Perfil"}
                                 </button>
                                 <div className="w-2" />
+                                {profile?.id && (
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setProfile({
+                                                id: "",
+                                                name: "",
+                                                email: "",
+                                            });
+                                        }}
+                                        className="flex text-sm rounded-full focus:outline-none  text-white"
+                                    >
+                                        <ExternalLinkIcon className="w-5" />
+                                    </button>
+                                )}
                                 {userState.id && (
                                     <button
                                         type="button"
@@ -161,125 +192,96 @@ function Header() {
                                                             >
                                                                 <XIcon className="w-6" />
                                                             </button>
-                                                            <form>
-                                                                <div className="flex flex-col items-stretch">
-                                                                    <span className="text-sm text-gray-900">
-                                                                        Bem-vindo
-                                                                        de
-                                                                        volta!
-                                                                    </span>
-                                                                    <h1 className="text-2xl font-bold">
-                                                                        Entre na
-                                                                        sua
-                                                                        conta
-                                                                    </h1>
-                                                                </div>
-                                                                <div className="mt-5">
-                                                                    <label className="font-semibold block text-md px-3 text-sm">
-                                                                        Login
-                                                                    </label>
-                                                                    <input
-                                                                        className="px-4 w-full border-2 py-2 focus:border-gray-700 duration-200 rounded-md text-sm outline-none"
-                                                                        type="email"
-                                                                        name="password"
-                                                                        placeholder="Email"
-                                                                    />
-                                                                </div>
-                                                                <div className="my-3">
-                                                                    <label className="font-semibold block text-md px-3 text-sm">
-                                                                        Senha
-                                                                    </label>
-                                                                    <input
-                                                                        className="px-4 w-full border-2 focus:border-gray-700 duration-200 py-2 rounded-md text-sm outline-none"
-                                                                        type="password"
-                                                                        name="password"
-                                                                        placeholder="Senha"
-                                                                    />
-                                                                </div>
-                                                                <div className="flex justify-between">
-                                                                    <span className="text-sm text-blue-700 hover:underline cursor-pointer">
-                                                                        Esqueceu
-                                                                        a senha?
-                                                                    </span>
-                                                                </div>
-                                                                <div className="flex flex-col items-stretch">
-                                                                    <button
-                                                                        type="button"
-                                                                        className="mt-4 mb-3 w-full bg-green-500 hover:bg-green-400 text-white font-bold py-4 active:bg-green-600  border-b-4 border-green-700 active:border-b-0 active:border-green-800 rounded-md transition duration-200"
-                                                                    >
-                                                                        ENTRAR
-                                                                    </button>
 
-                                                                    <GoogleLogin
-                                                                        clientId={
-                                                                            clientId
+                                                            <div className="flex flex-col items-stretch">
+                                                                <span className="text-sm text-gray-900">
+                                                                    Bem-vindo de
+                                                                    volta!
+                                                                </span>
+                                                                <h1 className="text-2xl font-bold">
+                                                                    Entre na sua
+                                                                    conta
+                                                                </h1>
+                                                            </div>
+                                                            <Form
+                                                                onSubmit={
+                                                                    onSubmit
+                                                                }
+                                                                render={({
+                                                                    handleSubmit,
+                                                                }) => (
+                                                                    <form
+                                                                        onSubmit={
+                                                                            handleSubmit
                                                                         }
-                                                                        buttonText="Ou entre pela sua conta Google"
-                                                                        onSuccess={(
-                                                                            e: any
-                                                                        ) => {
-                                                                            dispatch(
-                                                                                actions.setUser(
-                                                                                    e.profileObj
-                                                                                )
-                                                                            );
-                                                                        }}
-                                                                        onFailure={
-                                                                            onFailure
-                                                                        }
-                                                                        cookiePolicy="single_host_origin"
-                                                                    />
-                                                                </div>
-                                                            </form>
+                                                                    >
+                                                                        <div className="mt-5">
+                                                                            <label className="font-semibold block text-md px-3 text-sm">
+                                                                                Login
+                                                                            </label>
+                                                                            <Field
+                                                                                className="px-4 w-full border-2 py-2 focus:border-gray-700 duration-200 rounded-md text-sm outline-none"
+                                                                                type="email"
+                                                                                name="email"
+                                                                                component="input"
+                                                                                placeholder="E-mail"
+                                                                            />
+                                                                        </div>
+                                                                        <div className="my-3">
+                                                                            <label className="font-semibold block text-md px-3 text-sm">
+                                                                                Senha
+                                                                            </label>
+                                                                            <Field
+                                                                                className="px-4 w-full border-2 focus:border-gray-700 duration-200 py-2 rounded-md text-sm outline-none"
+                                                                                type="password"
+                                                                                name="senha"
+                                                                                component="input"
+                                                                                placeholder="Senha"
+                                                                            />
+                                                                        </div>
+                                                                        <div className="flex justify-between">
+                                                                            <span className="text-sm text-blue-700 hover:underline cursor-pointer">
+                                                                                Esqueceu
+                                                                                a
+                                                                                senha?
+                                                                            </span>
+                                                                        </div>
+                                                                        <button
+                                                                            type="submit"
+                                                                            className="mt-4 mb-3 w-full bg-green-500 hover:bg-green-400 text-white font-bold py-4 active:bg-green-600  border-b-4 border-green-700 active:border-b-0 active:border-green-800 rounded-md transition duration-200"
+                                                                        >
+                                                                            ENTRAR
+                                                                        </button>
+                                                                    </form>
+                                                                )}
+                                                            />
+                                                            <div className="flex flex-col items-stretch">
+                                                                <GoogleLogin
+                                                                    clientId={
+                                                                        clientId
+                                                                    }
+                                                                    buttonText="Ou entre pela sua conta Google"
+                                                                    onSuccess={(
+                                                                        e: any
+                                                                    ) => {
+                                                                        dispatch(
+                                                                            actions.setUser(
+                                                                                e.profileObj
+                                                                            )
+                                                                        );
+                                                                    }}
+                                                                    onFailure={
+                                                                        onFailure
+                                                                    }
+                                                                    cookiePolicy="single_host_origin"
+                                                                />
+                                                            </div>
                                                         </div>
                                                     </Dialog.Panel>
                                                 </Transition.Child>
                                             </div>
                                         </div>
                                     </Dialog>
-                                </Transition>
-                                <Transition
-                                    as={Fragment}
-                                    enter="transition ease-out duration-100"
-                                    enterFrom="transform opacity-0 scale-95"
-                                    enterTo="transform opacity-100 scale-100"
-                                    leave="transition ease-in duration-75"
-                                    leaveFrom="transform opacity-100 scale-100"
-                                    leaveTo="transform opacity-0 scale-95"
-                                >
-                                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                        <Menu.Item>
-                                            {({ active }) => (
-                                                <a
-                                                    href="/a"
-                                                    className={classNames(
-                                                        active
-                                                            ? "bg-gray-100"
-                                                            : "",
-                                                        "block px-4 py-2 text-sm text-gray-700"
-                                                    )}
-                                                >
-                                                    Seu Perfil
-                                                </a>
-                                            )}
-                                        </Menu.Item>
-
-                                        <Menu.Item>
-                                            {({ active }) => (
-                                                <a
-                                                    href="/a"
-                                                    className={classNames(
-                                                        active
-                                                            ? "bg-gray-100"
-                                                            : "",
-                                                        "block px-4 py-2 text-sm text-gray-700"
-                                                    )}
-                                                >
-                                                    Sair
-                                                </a>
-                                            )}
-                                        </Menu.Item>
-                                    </Menu.Items>
                                 </Transition>
                             </Menu>
                         </div>

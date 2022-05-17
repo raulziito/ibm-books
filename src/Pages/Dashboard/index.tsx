@@ -7,7 +7,6 @@ import {
     PlusSmIcon,
     ViewGridIcon,
 } from "@heroicons/react/solid";
-import axios, { AxiosResponse } from "axios";
 import React, { useState, Fragment, useEffect } from "react";
 import { Form, Field } from "react-final-form";
 import { AiFillHeart, AiOutlineClose } from "react-icons/ai";
@@ -15,12 +14,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Books from "../../Components/Books";
-import { api } from "../../Microservice/api";
 import { actions } from "../Redux/books";
 import { actions as actionsFav } from "../Redux/favorite";
 import { IStores, IFavoriteObjects } from "../Redux/types";
-
-const subCategories = [{ name: "Meus favoritos", href: "#" }];
 
 const Dashboard: React.FC = () => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -356,20 +352,62 @@ const Dashboard: React.FC = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
                         {/* Filtros */}
                         <form className="hidden lg:block">
-                            <h3 className="sr-only">Categorias</h3>
-                            <ul className="text-sm font-medium text-gray-900 space-y-4 pb-6 border-b border-gray-200">
-                                {subCategories.map((category) => (
-                                    <li key={category.name}>
-                                        <a
-                                            href={category.href}
-                                            className="flex items-center"
-                                        >
-                                            {" "}
-                                            <AiFillHeart className="text-plastic-pink mr-2" />
-                                            {category.name}
-                                        </a>
-                                    </li>
-                                ))}
+                            <ul className="text-sm font-medium text-gray-900 border-b border-gray-200">
+                                <Disclosure
+                                    as="div"
+                                    key="meusfavoritos"
+                                    className="border-t border-gray-200 border-b-0  py-6"
+                                >
+                                    {({ open }) => (
+                                        <>
+                                            <Disclosure.Button className=" bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
+                                                <p className="flex items-center font-medium text-gray-900">
+                                                    <AiFillHeart className="text-plastic-pink mr-2" />
+                                                    Meus Favoritos
+                                                </p>
+                                                <p className="ml-6 flex items-center">
+                                                    {open ? (
+                                                        <MinusSmIcon
+                                                            className="h-5 w-5"
+                                                            aria-hidden="true"
+                                                        />
+                                                    ) : (
+                                                        <PlusSmIcon
+                                                            className="h-5 w-5"
+                                                            aria-hidden="true"
+                                                        />
+                                                    )}
+                                                </p>
+                                            </Disclosure.Button>
+
+                                            <Disclosure.Panel className="">
+                                                <div className="p-4 ">
+                                                    {favoriteState.favorite.map(
+                                                        (
+                                                            item: IFavoriteObjects
+                                                        ) => (
+                                                            <Link
+                                                                className="flex hover:bg-gray-100 duration-200 p-2"
+                                                                key={
+                                                                    item.bookId
+                                                                }
+                                                                to={{
+                                                                    pathname: `/book-detail/${item.bookId}`,
+                                                                }}
+                                                            >
+                                                                <p className="px-10 flex items-center justify-center ">
+                                                                    {
+                                                                        item.bookName
+                                                                    }
+                                                                </p>
+                                                            </Link>
+                                                        )
+                                                    )}
+                                                </div>
+                                            </Disclosure.Panel>
+                                        </>
+                                    )}
+                                </Disclosure>
                             </ul>
 
                             {filters.map((section) => (

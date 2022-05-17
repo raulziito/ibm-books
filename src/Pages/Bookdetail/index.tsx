@@ -1,9 +1,10 @@
 import { Transition } from "@headlessui/react";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import Capa from "../../Assets/semcapa.png";
+import capa from "../../Assets/semcapa.png";
 import Rating from "../../Components/Rating";
 import { api } from "../../Microservice/api";
 import { actions } from "../Redux/books";
@@ -11,17 +12,29 @@ import { actions } from "../Redux/books";
 const BookDetail: React.FC = () => {
     const [show, setShow] = useState(false);
     const [show2, setShow2] = useState(false);
-
+    const [books, setBooks] = useState<Array<object | unknown>>([]);
     const { id } = useParams();
-
+    console.log(useParams());
     const bookState = useSelector((state: any) => state.books);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(actions.detailBook({ id }));
     }, []);
+    useEffect(() => {
+        api.get(
+            `https://www.googleapis.com/books/v1/volumes?q='${"Eiichiro"}&key=${
+                process.env.REACT_APP_GOOGLE_KEY
+            }&maxResults=4`
+        )
+            .then((response: any) => {
+                setBooks(response.data.items);
+            })
+            .catch((err) => {
+                return console.log(err);
+            });
+    }, []);
 
-    // console.log(bookState);
     return (
         <>
             <Transition
@@ -34,7 +47,7 @@ const BookDetail: React.FC = () => {
                 leaveTo="opacity-0"
                 show={bookState.loading}
             >
-                loading....
+                Carregando....
             </Transition>
             <Transition
                 enter="transition-opacity duration-1000"
@@ -45,7 +58,7 @@ const BookDetail: React.FC = () => {
                 leaveTo="opacity-0"
                 show={bookState.error}
             >
-                I will appear and disappear.
+                Carregando...
             </Transition>
             <Transition
                 enter="transition-opacity duration-1000"
@@ -120,9 +133,7 @@ const BookDetail: React.FC = () => {
                     <p className="md:w-96 text-base leading-normal text-gray-600 mt-4">
                         Autor: {bookState.description?.authors}
                     </p>
-                    <p className=" text-base lg:leading-tight leading-normal text-gray-600 mt-7">
-                        {bookState.description?.description}
-                    </p>
+
                     <div>
                         <div className="border-t border-b py-4 mt-7 border-gray-200">
                             <div
@@ -130,7 +141,7 @@ const BookDetail: React.FC = () => {
                                 className="flex justify-between items-center cursor-pointer"
                             >
                                 <p className="text-base leading-4 text-gray-800">
-                                    Formas de pagamento
+                                    Descrição
                                 </p>
                                 <button
                                     type="button"
@@ -144,39 +155,82 @@ const BookDetail: React.FC = () => {
                                 }`}
                                 id="sect"
                             >
-                                Lorem Ipsum is simply dummy text of the printing
-                                and Lorem Ipsum.
+                                {bookState.description?.description}
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div className="border-b py-4 border-gray-200">
-                            <div
-                                onClick={() => setShow2(!show2)}
-                                className="flex justify-between items-center cursor-pointer"
-                            >
-                                <p className="text-base leading-4 text-gray-800">
-                                    Dúvidas sobre o livro?
-                                </p>
-                                <button
-                                    type="button"
-                                    className="cursor-pointerfocus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded"
-                                    aria-label="show or hide"
-                                />
-                            </div>
-                            <div
-                                className={`pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 ${
-                                    show2 ? "block" : "hidden"
-                                }`}
-                                id="sect"
-                            >
-                                Lorem Ipsum is simply dummy text of the printing
-                                and Lorem Ipsum.
-                            </div>
+
+                    <div className="border-b py-4 border-gray-200">
+                        <div
+                            onClick={() => setShow2(!show2)}
+                            className="flex justify-between items-center cursor-pointer"
+                        >
+                            <p className="text-base leading-4 text-gray-800">
+                                Dúvidas sobre o livro?
+                            </p>
+                            <button
+                                type="button"
+                                className="cursor-pointerfocus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded"
+                                aria-label="show or hide"
+                            />
+                        </div>
+                        <div
+                            className={`pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 ${
+                                show2 ? "block" : "hidden"
+                            }`}
+                            id="sect"
+                        >
+                            Alguma coisa
                         </div>
                     </div>
                 </div>
             </Transition>
+            <h1 className="text-2xl flex-1 font-extrabold tracking-tight text-gray-900">
+                Livro(s) relacionado(s)
+            </h1>
+            <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 py-4">
+                {books.map((product: any) => {
+                    return (
+                        <div className="group">
+                            <Link
+                                key={product.id}
+                                to={{
+                                    pathname: `/book-detail/${product.id}`,
+                                }}
+                            >
+                                <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                                    <img
+                                        alt="Capa"
+                                        src={
+                                            product?.volumeInfo?.imageLinks
+                                                ?.thumbnail || capa
+                                        }
+                                        className="w-full h-60 object-center object-cover  transition ease-in-out delay-250 hover:-translate-y-1 hover:scale-110"
+                                    />
+                                </div>
+                            </Link>
+
+                            <div className="flex items-center justify-between  pt-4">
+                                <div className="bg-gray-100 py-1.5 px-6 rounded-full text-xs text-gray-500 text-ellipsis truncate">
+                                    {product?.volumeInfo?.categories ||
+                                        "Sem descrição"}
+                                </div>
+                            </div>
+
+                            <h3 className="mt-1 text-lg font-medium text-gray-900 text-ellipsis truncate">
+                                {product?.volumeInfo?.title}
+                            </h3>
+                            <Rating
+                                rating={product?.volumeInfo?.averageRating}
+                            />
+                            <p className="mt-4 text-sm text-gray-700 font-light">
+                                {product?.volumeInfo.authors ||
+                                    "Sem informação"}
+                            </p>
+                        </div>
+                    );
+                })}
+            </div>
         </>
     );
 };
