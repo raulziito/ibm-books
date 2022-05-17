@@ -16,5 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "tailwind.config.js", "src/Pages/Redux/books.tsx", "src/Pages/Redux/books.tsx"]
+  "include": ["src", "tailwind.config.js", "src/Redux/books.tsx", "src/Redux/books.tsx"]
 }

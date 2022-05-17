@@ -1,26 +1,26 @@
 import { Transition } from "@headlessui/react";
+import { FilterIcon, MinusSmIcon, PlusSmIcon } from "@heroicons/react/solid";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, Link } from "react-router-dom";
 
-import Capa from "../../Assets/semcapa.png";
 import capa from "../../Assets/semcapa.png";
 import Rating from "../../Components/Rating";
 import { api } from "../../Microservice/api";
-import { actions } from "../Redux/books";
+import { actions } from "../../Redux/books";
 
 const BookDetail: React.FC = () => {
     const [show, setShow] = useState(false);
     const [show2, setShow2] = useState(false);
     const [books, setBooks] = useState<Array<object | unknown>>([]);
     const { id } = useParams();
-    console.log(useParams());
     const bookState = useSelector((state: any) => state.books);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(actions.detailBook({ id }));
     }, []);
+
     useEffect(() => {
         api.get(
             `https://www.googleapis.com/books/v1/volumes?q='${"Eiichiro"}&key=${
@@ -49,6 +49,7 @@ const BookDetail: React.FC = () => {
             >
                 Carregando....
             </Transition>
+
             <Transition
                 enter="transition-opacity duration-1000"
                 enterFrom="opacity-0"
@@ -60,6 +61,7 @@ const BookDetail: React.FC = () => {
             >
                 Carregando...
             </Transition>
+
             <Transition
                 enter="transition-opacity duration-1000"
                 enterFrom="opacity-0"
@@ -72,7 +74,7 @@ const BookDetail: React.FC = () => {
                         className="w-full"
                         alt="Capa"
                         src={
-                            bookState.description?.imageLinks?.thumbnail || Capa
+                            bookState.description?.imageLinks?.thumbnail || capa
                         }
                     />
                 </div>
@@ -83,7 +85,7 @@ const BookDetail: React.FC = () => {
                             className="md:w-48 md:h-48 w-full"
                             src={
                                 bookState.description?.imageLinks?.thumbnail ||
-                                Capa
+                                capa
                             }
                         />
                     </div>
@@ -123,7 +125,7 @@ const BookDetail: React.FC = () => {
                         className="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-base flex items-center justify-center leading-none text-white bg-gray-800 w-full py-4 rounded-md hover:bg-gray-700"
                         rel="noreferrer"
                     >
-                        Preview
+                        Detalhar
                     </a>
 
                     <p className=" text-base lg:leading-tight leading-normal text-gray-600 mt-7">
@@ -131,23 +133,34 @@ const BookDetail: React.FC = () => {
                     </p>
 
                     <p className="md:w-96 text-base leading-normal text-gray-600 mt-4">
-                        Autor: {bookState.description?.authors}
+                        <span className="font-medium text-gray-900">
+                            Autor:
+                        </span>
+                        {bookState.description?.authors}
                     </p>
 
                     <div>
                         <div className="border-t border-b py-4 mt-7 border-gray-200">
                             <div
                                 onClick={() => setShow(!show)}
-                                className="flex justify-between items-center cursor-pointer"
+                                className=" bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500 cursor-pointer"
                             >
-                                <p className="text-base leading-4 text-gray-800">
+                                <p className="flex items-center font-medium text-gray-900 ">
                                     Descrição
                                 </p>
-                                <button
-                                    type="button"
-                                    className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded"
-                                    aria-label="show or hide"
-                                />
+                                <p className="ml-6 flex items-center">
+                                    {show ? (
+                                        <MinusSmIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                        />
+                                    ) : (
+                                        <PlusSmIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                        />
+                                    )}
+                                </p>
                             </div>
                             <div
                                 className={`pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 ${
@@ -163,16 +176,24 @@ const BookDetail: React.FC = () => {
                     <div className="border-b py-4 border-gray-200">
                         <div
                             onClick={() => setShow2(!show2)}
-                            className="flex justify-between items-center cursor-pointer"
+                            className="bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500 cursor-pointer"
                         >
-                            <p className="text-base leading-4 text-gray-800">
+                            <p className="flex items-center font-medium text-gray-900 ">
                                 Dúvidas sobre o livro?
                             </p>
-                            <button
-                                type="button"
-                                className="cursor-pointerfocus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 rounded"
-                                aria-label="show or hide"
-                            />
+                            <p className="ml-6 flex items-center">
+                                {show2 ? (
+                                    <MinusSmIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                    />
+                                ) : (
+                                    <PlusSmIcon
+                                        className="h-5 w-5 "
+                                        aria-hidden="true"
+                                    />
+                                )}
+                            </p>
                         </div>
                         <div
                             className={`pt-4 text-base leading-normal pr-12 mt-4 text-gray-600 ${

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { api } from "../../Microservice/api";
+import { api } from "../Microservice/api";
 import { IBookState, IStores } from "./types";
 
 const getBook: any = createAsyncThunk(
@@ -83,7 +83,7 @@ const initialState: IBookState = {
     total: 0,
     current_page: 0,
     per_page: 8,
-    keyword: "bem vindo",
+    keyword: "React",
     loading: false,
     error: false,
     description: {},

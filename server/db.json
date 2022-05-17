@@ -6,10 +6,10 @@
       "email": "raul.sousa@gmail.com"
     },
     {
-        "id": 2,
-        "name": "Raul",
-        "email": "raul.sousa2016@gmail.com"
-      }
+      "id": 2,
+      "name": "Raul",
+      "email": "raul.sousa2016@gmail.com"
+    }
   ],
   "favorites": [
     {
@@ -142,12 +142,6 @@
       "bookId": "HKwXEAAAQBAJ",
       "bookName": "Bem-vindo À Ghranlomo Parte1",
       "id": 25
-    },
-    {
-      "user": "116616235255852024388",
-      "bookId": "UN_DDQAAQBAJ",
-      "bookName": "Desintegrados",
-      "id": 26
     },
     {
       "user": "116616235255852024388",

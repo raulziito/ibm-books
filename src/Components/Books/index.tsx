@@ -4,9 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import semcapa from "../../Assets/semcapa.png";
-import { actions as actionPaginate } from "../../Pages/Redux/books";
-import { actions } from "../../Pages/Redux/favorite";
-import { IFavoriteObjects, IStores } from "../../Pages/Redux/types";
+import { actions as actionPaginate } from "../../Redux/books";
+import { actions } from "../../Redux/favorite";
+import { IFavoriteObjects, IStores } from "../../Redux/types";
 import Rating from "../Rating";
 
 function Books(data: any) {

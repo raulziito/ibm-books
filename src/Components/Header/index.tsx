@@ -1,16 +1,17 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { Disclosure, Menu, Transition, Dialog } from "@headlessui/react";
 import { ExternalLinkIcon, XIcon } from "@heroicons/react/solid";
 import { gapi } from "gapi-script";
 import React, { Fragment, useEffect, useState } from "react";
-import { Form, Field } from "react-final-form";
 import GoogleLogin from "react-google-login";
+import { useForm } from "react-hook-form";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { FaRegUserCircle } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 
 import Logo from "../../Assets/logo.png";
 import { api } from "../../Microservice/api";
-import { actions } from "../../Pages/Redux/user";
+import { actions } from "../../Redux/user";
 
 function Header() {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,10 +20,14 @@ function Header() {
         name: string;
         email: string;
     }>();
-
     const userState = useSelector((state: any) => state.user);
-
     const dispatch = useDispatch();
+
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+    } = useForm();
 
     useEffect(() => {
         if (userState.id) {
@@ -122,9 +127,7 @@ function Header() {
                                 >
                                     {userState.id
                                         ? userState.name
-                                        : profile?.id
-                                        ? profile?.name
-                                        : "Seu Perfil"}
+                                        : "Seu perfil"}
                                 </button>
                                 <div className="w-2" />
                                 {profile?.id && (
@@ -203,58 +206,73 @@ function Header() {
                                                                     conta
                                                                 </h1>
                                                             </div>
-                                                            <Form
-                                                                onSubmit={
+                                                            <form
+                                                                onSubmit={handleSubmit(
                                                                     onSubmit
-                                                                }
-                                                                render={({
-                                                                    handleSubmit,
-                                                                }) => (
-                                                                    <form
-                                                                        onSubmit={
-                                                                            handleSubmit
-                                                                        }
-                                                                    >
-                                                                        <div className="mt-5">
-                                                                            <label className="font-semibold block text-md px-3 text-sm">
-                                                                                Login
-                                                                            </label>
-                                                                            <Field
-                                                                                className="px-4 w-full border-2 py-2 focus:border-gray-700 duration-200 rounded-md text-sm outline-none"
-                                                                                type="email"
-                                                                                name="email"
-                                                                                component="input"
-                                                                                placeholder="E-mail"
-                                                                            />
-                                                                        </div>
-                                                                        <div className="my-3">
-                                                                            <label className="font-semibold block text-md px-3 text-sm">
-                                                                                Senha
-                                                                            </label>
-                                                                            <Field
-                                                                                className="px-4 w-full border-2 focus:border-gray-700 duration-200 py-2 rounded-md text-sm outline-none"
-                                                                                type="password"
-                                                                                name="senha"
-                                                                                component="input"
-                                                                                placeholder="Senha"
-                                                                            />
-                                                                        </div>
-                                                                        <div className="flex justify-between">
-                                                                            <span className="text-sm text-blue-700 hover:underline cursor-pointer">
-                                                                                Esqueceu
-                                                                                a
-                                                                                senha?
-                                                                            </span>
-                                                                        </div>
-                                                                        <button
-                                                                            type="submit"
-                                                                            className="mt-4 mb-3 w-full bg-green-500 hover:bg-green-400 text-white font-bold py-4 active:bg-green-600  border-b-4 border-green-700 active:border-b-0 active:border-green-800 rounded-md transition duration-200"
-                                                                        >
-                                                                            ENTRAR
-                                                                        </button>
-                                                                    </form>
                                                                 )}
-                                                            />
+                                                            >
+                                                                <div className="mt-5">
+                                                                    <label className="font-semibold block text-md px-1 text-xs py-2 ">
+                                                                        Login
+                                                                    </label>
+                                                                    <input
+                                                                        {...register(
+                                                                            "email",
+                                                                            {
+                                                                                required:
+                                                                                    true,
+                                                                            }
+                                                                        )}
+                                                                        className="px-4 w-full border-2 py-2 focus:border-gray-700 duration-200 rounded-md text-sm outline-none"
+                                                                        type="email"
+                                                                        placeholder="E-mail"
+                                                                    />
+                                                                    <span className="text-red-600 text-sm px-2 font-light">
+                                                                        {errors
+                                                                            .email
+                                                                            ?.type ===
+                                                                            "required" &&
+                                                                            "Campo obrigatório."}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="my-3">
+                                                                    <label className="font-semibold block text-md px-1 text-xs py-2 ">
+                                                                        Senha
+                                                                    </label>
+                                                                    <input
+                                                                        {...register(
+                                                                            "password",
+                                                                            {
+                                                                                required:
+                                                                                    true,
+                                                                            }
+                                                                        )}
+                                                                        className="px-4 w-full border-2 focus:border-gray-700 duration-200 py-2 rounded-md text-sm outline-none"
+                                                                        type="password"
+                                                                        placeholder="Senha"
+                                                                    />
+                                                                    <span className="text-red-600 text-sm px-2 font-light">
+                                                                        {errors
+                                                                            .password
+                                                                            ?.type ===
+                                                                            "required" &&
+                                                                            "Campo obrigatório."}
+                                                                    </span>
+                                                                </div>
+
+                                                                <div className="flex justify-between">
+                                                                    <span className="text-sm text-blue-700 hover:underline cursor-pointer">
+                                                                        Esqueceu
+                                                                        a senha?
+                                                                    </span>
+                                                                </div>
+                                                                <button
+                                                                    type="submit"
+                                                                    className="mt-4 mb-3 w-full bg-green-500 hover:bg-green-400 text-white font-bold py-4 active:bg-green-600  border-b-4 border-green-700 active:border-b-0 active:border-green-800 rounded-md transition duration-200"
+                                                                >
+                                                                    ENTRAR
+                                                                </button>
+                                                            </form>
                                                             <div className="flex flex-col items-stretch">
                                                                 <GoogleLogin
                                                                     clientId={

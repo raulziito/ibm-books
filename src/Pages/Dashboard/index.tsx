@@ -1,29 +1,17 @@
 import { Disclosure, Menu, Transition, Dialog } from "@headlessui/react";
-import {
-    ChevronDownIcon,
-    ChevronRightIcon,
-    FilterIcon,
-    MinusSmIcon,
-    PlusSmIcon,
-    ViewGridIcon,
-} from "@heroicons/react/solid";
+import { FilterIcon, MinusSmIcon, PlusSmIcon } from "@heroicons/react/solid";
 import React, { useState, Fragment, useEffect } from "react";
-import { Form, Field } from "react-final-form";
 import { AiFillHeart, AiOutlineClose } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Books from "../../Components/Books";
-import { actions } from "../Redux/books";
-import { actions as actionsFav } from "../Redux/favorite";
-import { IStores, IFavoriteObjects } from "../Redux/types";
+import { actions } from "../../Redux/books";
+import { actions as actionsFav } from "../../Redux/favorite";
+import { IStores, IFavoriteObjects } from "../../Redux/types";
 
 const Dashboard: React.FC = () => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-    function classNames(...classes: any) {
-        return classes.filter(Boolean).join(" ");
-    }
-
     const favoriteState = useSelector((state: IStores) => state.favorite);
     const bookState = useSelector((state: IStores) => state.books);
     const userState = useSelector((state: IStores) => state.user);
@@ -70,7 +58,7 @@ const Dashboard: React.FC = () => {
 
     useEffect(() => {
         if (bookState.data.length === 0) {
-            dispatch(actions.getBook({ keyword: "bem vindo" }));
+            dispatch(actions.getBook({ keyword: "React" }));
         }
     }, []);
 
